@@ -20,3 +20,4 @@ public class MyWebInit implements WebApplicationInitializer {
         dispatcher.addMapping("/");
     }
 }
+4
