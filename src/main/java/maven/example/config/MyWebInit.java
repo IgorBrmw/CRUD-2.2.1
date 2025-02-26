@@ -6,6 +6,7 @@ import org.springframework.web.context.support.AnnotationConfigWebApplicationCon
 import org.springframework.web.servlet.DispatcherServlet;
 
 import javax.servlet.*;
+
 @Configuration
 public class MyWebInit implements WebApplicationInitializer {
 
@@ -20,4 +21,3 @@ public class MyWebInit implements WebApplicationInitializer {
         dispatcher.addMapping("/");
     }
 }
-4

@@ -16,22 +16,12 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-
     @GetMapping("/")
     public String listUsers(Model model) {
         List<User> users = userService.getAllUsers();
         model.addAttribute("users", users);
         return "users";
     }
-
-//    @PostMapping("/new")
-//    public String addUser(@RequestParam("name") String name,
-//                          @RequestParam("surname") String surname,
-//                          @RequestParam("email") String email, Model model) {
-//        User user = new User(name, surname, email);
-//        model.addAttribute("user", user);
-//        return "userInfo";
-//    }
 
     @RequestMapping("/addUser")
     public String addUser(Model model) {
@@ -41,7 +31,7 @@ public class UserController {
     }
 
     @RequestMapping("/saveUser")
-    public String saveUser(@ModelAttribute("user") User user){
+    public String saveUser(@ModelAttribute("user") User user) {
         userService.saveUser(user);
         return "redirect:/";
     }
@@ -59,26 +49,4 @@ public class UserController {
         userService.deleteUser(id);
         return "redirect:/";
     }
-
-
-
-//    @PostMapping("/delete")
-//    public String deleteUser(@RequestParam("id") int id, Model model) {
-//        userService.deleteUser(id);
-//        return "redirect:/users";
-//    }
-//
-//    @PostMapping("/update")
-//    public String updateUser(@RequestParam("id") int id,
-//                             @RequestParam("name") String name,
-//                             @RequestParam ("surname") String surname,
-//                             @RequestParam("email") String email,
-//                             Model model) {
-//        User user = userService.getUser(id);
-//        if(name != null) {user.setName(name);}
-//        if(surname != null) {user.setSurname(surname);}
-//        if(email!=null){user.setEmail(email);}
-//        return "redirect:/users";
-//    }
-
 }

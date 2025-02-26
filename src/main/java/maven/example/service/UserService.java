@@ -1,10 +1,8 @@
 package maven.example.service;
 
 import maven.example.DAO.UserDAO;
-import maven.example.DAO.UserDAOImpl;
 import maven.example.model.User;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;

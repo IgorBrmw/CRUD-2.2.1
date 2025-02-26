@@ -2,20 +2,13 @@ package maven.example.config;
 
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.orm.hibernate5.*;
+import org.springframework.context.annotation.*;
+import org.springframework.orm.jpa.*;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
-import org.springframework.web.servlet.config.annotation.ViewResolverRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.view.InternalResourceViewResolver;
-import org.thymeleaf.spring5.SpringTemplateEngine;
-import org.thymeleaf.spring5.templateresolver.SpringResourceTemplateResolver;
-import org.thymeleaf.spring5.view.ThymeleafViewResolver;
 
 import javax.sql.DataSource;
 import java.util.Properties;
@@ -26,12 +19,11 @@ import java.util.Properties;
 @EnableTransactionManagement
 public class SpringConfig implements WebMvcConfigurer {
 
-
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/view/"); // Префикс для JSP-файлов
-        resolver.setSuffix(".jsp"); // Суффикс для JSP-файлов
+        resolver.setPrefix("/WEB-INF/view/");
+        resolver.setSuffix(".jsp");
         return resolver;
     }
 
@@ -49,30 +41,28 @@ public class SpringConfig implements WebMvcConfigurer {
     }
 
     @Bean
-    public LocalSessionFactoryBean sessionFactory() throws Exception {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("maven.example.model"); // Сканируем пакет для поиска сущностей
-        sessionFactory.setHibernateProperties(hibernateProperties());
-        return sessionFactory;
+    public LocalContainerEntityManagerFactoryBean entityManagerFactory() throws Exception {
+        LocalContainerEntityManagerFactoryBean em = new LocalContainerEntityManagerFactoryBean();
+        em.setDataSource(dataSource());
+        em.setPackagesToScan("maven.example.model");
+        HibernateJpaVendorAdapter vendorAdapter = new HibernateJpaVendorAdapter();
+        em.setJpaVendorAdapter(vendorAdapter);
+        em.setJpaProperties(hibernateProperties());
+        return em;
+    }
+
+    @Bean
+    public JpaTransactionManager transactionManager() throws Exception {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(entityManagerFactory().getObject());
+        return transactionManager;
     }
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
         properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
         properties.setProperty("hibernate.show_sql", "true");
+        properties.setProperty("hibernate.hbm2ddl.auto", "update");
         return properties;
-
     }
-
-    @Bean
-    public HibernateTransactionManager transactionManager() throws Exception {
-        HibernateTransactionManager transactionManager = new HibernateTransactionManager();
-        transactionManager.setSessionFactory(sessionFactory().getObject());
-        return transactionManager;
-    }
-
-
-
-
 }
