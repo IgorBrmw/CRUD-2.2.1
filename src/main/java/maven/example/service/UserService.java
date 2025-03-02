@@ -1,36 +1,18 @@
 package maven.example.service;
 
-import maven.example.DAO.UserDAO;
 import maven.example.model.User;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
 
-import javax.transaction.Transactional;
+
 import java.util.List;
 
-@Service
-public class UserService {
+public interface UserService {
 
-    @Autowired
-    private UserDAO userDAO;
+    void saveUser(User user);
 
-    @Transactional
-    public void saveUser(User user) {
-        userDAO.save(user);
-    }
+    User getUser(int id);
 
-    @Transactional
-    public User getUser(int id) {
-        return userDAO.findById(id);
-    }
+    List<User> getAllUsers();
 
-    @Transactional
-    public List<User> getAllUsers() {
-        return userDAO.findAll();
-    }
+    void deleteUser(int id);
 
-    @Transactional
-    public void deleteUser(int id) {
-        userDAO.delete(id);
-    }
 }

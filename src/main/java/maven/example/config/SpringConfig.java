@@ -2,6 +2,7 @@ package maven.example.config;
 
 
 import com.mchange.v2.c3p0.ComboPooledDataSource;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.*;
 import org.springframework.orm.jpa.*;
 import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
@@ -17,23 +18,52 @@ import java.util.Properties;
 @ComponentScan(basePackages = "maven.example")
 @EnableWebMvc
 @EnableTransactionManagement
+@PropertySource("classpath:/app.properties")
 public class SpringConfig implements WebMvcConfigurer {
+
+
+    @Value("${spring.mvc.view.prefix}")
+    private String viewPrefix;
+
+    @Value("${spring.mvc.view.suffix}")
+    private String viewSuffix;
+
+    @Value("${spring.datasource.driver-class-name}")
+    private String driverClassName;
+
+    @Value("${spring.datasource.url}")
+    private String jdbcUrl;
+
+    @Value("${spring.datasource.username}")
+    private String username;
+
+    @Value("${spring.datasource.password}")
+    private String password;
+
+    @Value("${spring.jpa.database-platform}")
+    private String hibernateDialect;
+
+    @Value("${spring.jpa.show-sql}")
+    private String hibernateShowSql;
+
+    @Value("${spring.jpa.hibernate.ddl-auto}")
+    private String hibernateHbm2ddlAuto;
 
     @Bean
     public InternalResourceViewResolver viewResolver() {
         InternalResourceViewResolver resolver = new InternalResourceViewResolver();
-        resolver.setPrefix("/WEB-INF/view/");
-        resolver.setSuffix(".jsp");
+        resolver.setPrefix(viewPrefix);
+        resolver.setSuffix(viewSuffix);
         return resolver;
     }
 
     @Bean
     public DataSource dataSource() throws Exception {
         ComboPooledDataSource dataSource = new ComboPooledDataSource();
-        dataSource.setDriverClass("com.mysql.cj.jdbc.Driver");
-        dataSource.setJdbcUrl("jdbc:mysql://localhost:3306/mydbtest?useSSL=false&serverTimezone=UTC");
-        dataSource.setUser("root");
-        dataSource.setPassword("rootqwe");
+        dataSource.setDriverClass(driverClassName);
+        dataSource.setJdbcUrl(jdbcUrl);
+        dataSource.setUser(username);
+        dataSource.setPassword(password);
         dataSource.setMinPoolSize(5);
         dataSource.setMaxPoolSize(20);
         dataSource.setMaxIdleTime(30000);
@@ -60,9 +90,9 @@ public class SpringConfig implements WebMvcConfigurer {
 
     private Properties hibernateProperties() {
         Properties properties = new Properties();
-        properties.setProperty("hibernate.dialect", "org.hibernate.dialect.MySQLDialect");
-        properties.setProperty("hibernate.show_sql", "true");
-        properties.setProperty("hibernate.hbm2ddl.auto", "update");
+        properties.setProperty("hibernate.dialect", hibernateDialect);
+        properties.setProperty("hibernate.show_sql", hibernateShowSql);
+        properties.setProperty("hibernate.hbm2ddl.auto", hibernateHbm2ddlAuto);
         return properties;
     }
 }
