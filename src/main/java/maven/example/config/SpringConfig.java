@@ -18,11 +18,11 @@ import java.util.Properties;
 @ComponentScan(basePackages = "maven.example")
 @EnableWebMvc
 @EnableTransactionManagement
-@PropertySource("classpath:/app.properties")
+@PropertySource("classpath:app.properties")
 public class SpringConfig implements WebMvcConfigurer {
 
 
-    @Value("${spring.mvc.view.prefix}")
+   @Value("${spring.mvc.view.prefix}")
     private String viewPrefix;
 
     @Value("${spring.mvc.view.suffix}")
