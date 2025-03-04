@@ -5,12 +5,12 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 
 import maven.example.model.User;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-@Transactional
 public class UserDAOImpl implements UserDAO {
 
     @PersistenceContext

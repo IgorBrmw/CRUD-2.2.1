@@ -9,27 +9,28 @@ import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
-public class UserServiceImpl {
+@Transactional
+public class UserServiceImpl implements UserService {
 
-    @Autowired
     private UserDAO userDAO;
 
-    @Transactional
+    @Autowired
+    public UserServiceImpl(UserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
     public void saveUser(User user) {
         userDAO.save(user);
     }
 
-    @Transactional
     public User getUser(int id) {
         return userDAO.findById(id);
     }
 
-    @Transactional
     public List<User> getAllUsers() {
         return userDAO.findAll();
     }
 
-    @Transactional
     public void deleteUser(int id) {
         userDAO.delete(id);
     }
